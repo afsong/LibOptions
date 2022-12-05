@@ -1,7 +1,3 @@
-//
-// Created by Zhonglin Yang on 12/5/22.
-//
-
 #ifndef LIBOPTIONS_PATHPLOTTER_H
 #define LIBOPTIONS_PATHPLOTTER_H
 

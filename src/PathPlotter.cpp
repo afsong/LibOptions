@@ -1,7 +1,3 @@
-//
-// Created by Zhonglin Yang on 12/5/22.
-//
-
 #include <PathPlotter.h>
 #include <pbPlots.hpp>
 #include <supportLib.hpp>
