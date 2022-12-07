@@ -2,18 +2,47 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <numeric>
 #include <MonteCarlo.h>
 #include <LeastSquaresFitter.h>
 
 using namespace std;
 
-void DiscountCashflow(vector<double> &cashflow, const double r, const double dt, const int i) {
-    for (int j = 0; j < cashflow.size(); j++) {
+void DiscountCashflow(vector<double> &cashflow, const double r, const double dt, const int i)
+{
+    for (int j = 0; j < cashflow.size(); j++)
+    {
         cashflow[j] *= exp(-r * dt * i);
     }
 }
 
-LongstaffSchwartzAlgo::LongstaffSchwartzAlgo() { // Constructor with parameters
+void UpdateCashflow(vector<double> &cashflow,
+                    const vector<double> &inMoneyStockPrices,
+                    const vector<int> &inMoneyPaths,
+                    const vector<double> &predictedCashflow,
+                    int K)
+{
+    vector<double> exerciseValues;
+    for (double stockPrice : inMoneyStockPrices)
+    {
+        exerciseValues.push_back(PutOptionPayoff(stockPrice, K));
+    }
+
+    for (int i = 0; i < inMoneyPaths.size(); i++)
+    {
+        if (predictedCashflow[i] < exerciseValues[i]) {
+//            std::cout<< "In money path: "<< inMoneyPaths[i] << "\n";
+//            std::cout<< "Exercise Payoff: "<< exerciseValues[i] << "\n";
+//            std::cout<< "Predicted Continuation value: "<< predictedCashflow[i] <<"\n";
+            cashflow[inMoneyPaths[i]] = exerciseValues[i];
+//            std::cout<< "Updated Cashflow: "<< cashflow[inMoneyPaths[i]]  <<"\n";
+        }
+    }
+}
+
+
+LongstaffSchwartzAlgo::LongstaffSchwartzAlgo()
+{ // Constructor with parameters
     backwardPathsNum = 100;
     forwardPathsNum = 100;
     timestampNum = 100;
@@ -57,7 +86,8 @@ int LongstaffSchwartzAlgo::BackwardFit()
 
 
     // one step
-    // Discount the cashflow
+
+    // 1. Discount the cashflow
     DiscountCashflow(cashflow, r, dt, 1);
 
 //    for (double i : cashflow) {
@@ -65,6 +95,7 @@ int LongstaffSchwartzAlgo::BackwardFit()
 //    }
 //    cout << endl;
 
+    // 2. Find in money paths' stock prices and discounted cashflows
     cout << "Timestamp: " << 99 << endl;
     vector<int> inMoneyPaths;
     // x and y for least squares
@@ -72,14 +103,15 @@ int LongstaffSchwartzAlgo::BackwardFit()
     vector<double> inMoneyDiscountedCashflows;
     for (int i = 0; i < stockPricePaths.size(); i++)
     {
-        if(PutOptionPayoff(stockPricePaths[i][98], K) > 0.0) {
+        if(PutOptionPayoff(stockPricePaths[i][98], K) > 0.0)
+        {
             inMoneyPaths.push_back(i);
             inMoneyStockPrices.push_back(stockPricePaths[i][98]);
             inMoneyDiscountedCashflows.push_back(cashflow[i]);
         }
     }
 
-    // print out in money paths
+    // Print out in money paths
 //    cout << "In money paths: " <<  " \n";
 //    for (double i : inMoneyPaths) {
 //        cout << i << " ";
@@ -90,37 +122,55 @@ int LongstaffSchwartzAlgo::BackwardFit()
 //        cout << i << " ";
 //    }
 //    cout << endl;
+
     cout << "In-Money Paths' Discounted Cashflows: " <<  " \n";
-    for (double i : inMoneyDiscountedCashflows) {
+    for (double i : inMoneyDiscountedCashflows)
+    {
         cout << i << " ";
     }
     cout << endl;
 
-    // least squares method
+    // 3. Apply least squares method
     vector<double> coeff;
     PolyFit(inMoneyStockPrices, inMoneyDiscountedCashflows, coeff, 3);
     //
 
-    //
+    // Print out coeff
     cout << "Coeffs: " <<  " \n";
-    for (double i : coeff) {
+    for (double i : coeff)
+    {
         cout << i << " ";
     }
     cout << endl;
 
 
+    // 4. Predict cashflow
     std::vector<double> predictedCashflow;
     PolyPredict(inMoneyStockPrices, coeff, predictedCashflow, 3);
     cout << "Predicted Cashflows: " <<  " \n";
-    for (double i : predictedCashflow) {
+    for (double i : predictedCashflow)
+    {
         cout << i << " ";
     }
     cout << endl;
 
 
+    // Calculate meanSquaredError
     std::cout<< "Loss: "<< "\n";
     std::cout << MeanSquaredError(inMoneyDiscountedCashflows, predictedCashflow) << std::endl;
 
+    // 5. Update cashflow
+    UpdateCashflow(cashflow, inMoneyStockPrices, inMoneyPaths, predictedCashflow, K);
+
+//    std::cout<< "Cashflow: "<< "\n";
+//    for (double c : cashflow)
+//    {
+//        std::cout<<  c << " ";
+//    }
+//    std::cout << endl;
+
+    // 6. Calculate cashflow mean
+    std::cout << "Cashflow mean: " << reduce(cashflow.begin(), cashflow.end()) / cashflow.size() << "\n";
 
     // Backward fit loops
 //    for (int i = callNum - 1; i > 0; i--) {

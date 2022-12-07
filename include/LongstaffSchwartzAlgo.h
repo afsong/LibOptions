@@ -1,6 +1,7 @@
 #ifndef LIBOPTIONS_LONGSTAFFSCHWARTZALGO_H
 #define LIBOPTIONS_LONGSTAFFSCHWARTZALGO_H
-#include "AmericanOption.h"
+#include <AmericanOption.h>
+
 class LongstaffSchwartzAlgo {
     private:
         int backwardPathsNum;
@@ -19,7 +20,13 @@ class LongstaffSchwartzAlgo {
         int ForwardEvaluation();
 };
 
-//void DiscountCashflow(vector<double> *cashflow, const double r, const double dt, const int i);
+//void DiscountCashflow(vector<double> &cashflow, const double r, const double dt, const int i);
+
+//void UpdateCashflow(vector<double> &cashflow,
+//                    const vector<double> &inMoneyStockPrices,
+//                    const vector<double> &inMoneyPaths,
+//                    const vector<double> &predictedCashflow,
+//                    int K);
 
 
 #endif // LIBOPTIONS_LONGSTAFFSCHWARTZALGO_H

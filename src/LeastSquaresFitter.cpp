@@ -58,7 +58,7 @@ double MeanSquaredError(const vector<double> &actualValue, const vector<double> 
 {
     assert(actualValue.size() == actualValue.size());
 
-    double error;
+    double error = 0.0;
     for (int i = 0; i < actualValue.size(); i++)
     {
         error += pow(actualValue.at(i) - predictedValue.at(i), 2);
