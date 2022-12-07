@@ -1,32 +1,32 @@
-#ifndef LIBOPTIONS_MONTECARLO_H
-#define LIBOPTIONS_MONTECARLO_H
+#ifndef LIBOPTIONS_BINARY_TREE_H
+#define LIBOPTIONS_BINARY_TREE_H
 
-#include <vector>
 #include <path_generator.h>
 
 namespace LibOptions {
 
-struct MonteCarloConfig {
+struct BinaryTreeConfig {
     double d_origPrice;
     double d_numTimestamps;
     double d_strikePrice;
-    double d_numPaths;
+    double d_numSteps;
     double d_riskFreeRate;
     double d_volatility;
+
 };
 
-class MonteCarloPath : public PathGenerator {
+class BinaryTreePath : public PathGenerator {
 public:
-    MonteCarloPath(const MonteCarloConfig& config);
+    BinaryTreePath(const BinaryTreeConfig& config);
 
     std::vector<std::vector<double>> generateStockPaths();
     void printPath();
 
 private:
-    MonteCarloConfig d_config;
+    BinaryTreeConfig d_config;
     std::vector<std::vector<double>> d_paths;
 };
 
-} // namespace LibOptions
+}
 
-#endif // LIBOPTIONS_MONTECARLO_H
+#endif
