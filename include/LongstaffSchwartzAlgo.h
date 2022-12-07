@@ -19,7 +19,7 @@ class LongstaffSchwartzAlgo {
         int ForwardEvaluation();
 };
 
-double DiscountCashflow(double cashflow, double r, double dt, int i);
+//void DiscountCashflow(vector<double> *cashflow, const double r, const double dt, const int i);
 
 
 #endif // LIBOPTIONS_LONGSTAFFSCHWARTZALGO_H
