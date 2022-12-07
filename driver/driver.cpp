@@ -12,12 +12,12 @@ int main(int argc, char* argv[])
     }
     
     LibOptions::MonteCarloConfig monteConfig;
-    monteConfig.d_origPrice = 100;
+    monteConfig.d_origPrice = 1;
     monteConfig.d_numTimestamps = 10;
     monteConfig.d_strikePrice = 1;
     monteConfig.d_numPaths = 100;
     monteConfig.d_riskFreeRate = 0.04;
-    monteConfig.d_rateOfReturn = 0.2;
+    monteConfig.d_volatility = 0.2;
 
     LibOptions::MonteCarloPath path(monteConfig);
     path.generateStockPaths();

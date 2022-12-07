@@ -32,7 +32,7 @@ std::vector<std::vector<double>> MonteCarloPath::generateStockPaths()
         d_paths.push_back({});
         for (int j = 0; j < d_config.d_numTimestamps; j++) {
             price += d_config.d_riskFreeRate * price * dt
-                     + d_config.d_rateOfReturn * price * sqrt(dt) * dW[i][j];
+                     + d_config.d_volatility * price * sqrt(dt) * dW[i][j];
             d_paths[i].push_back(price);
         }
         price = d_config.d_origPrice;

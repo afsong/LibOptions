@@ -12,7 +12,7 @@ struct MonteCarloConfig {
     double d_strikePrice;
     int d_numPaths;
     double d_riskFreeRate;
-    double d_rateOfReturn;
+    double d_volatility;
 };
 
 class MonteCarloPath : public PathGenerator {
