@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include <monte_carlo.h>
+#include <europevanilla_model.h>
 
 int main(int argc, char* argv[])
 {
@@ -10,7 +11,7 @@ int main(int argc, char* argv[])
         vect.push_back({});
         for (int j = 0; j < 5; j++) { vect[i].push_back(1); }
     }
-    
+    /*
     LibOptions::MonteCarloConfig monteConfig;
     monteConfig.d_origPrice = 1;
     monteConfig.d_numTimestamps = 10;
@@ -23,6 +24,15 @@ int main(int argc, char* argv[])
     path.generateStockPaths();
 
     path.printPath();
+    */
+
+    // BSM Vanilla below
+    LibOptions::EuropeVanillaModelConfig evConfig(100, 0.1, 0.02, 100, 3, 0,
+                                                  10000, true, "bsm");
+    LibOptions::EuropeVanillaModel evModel(evConfig);
+    double price = evModel.calc_value();
+    std::cout << "The price of EuroVanilla: " << price << std::endl;
+   
 
     return 0;
 }
