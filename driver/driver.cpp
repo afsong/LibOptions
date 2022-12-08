@@ -8,8 +8,10 @@
 using namespace std;
 int main(int argc, char *argv[])
 {
+    vector<vector<double>> coeffs;
     LongstaffSchwartzAlgo longstaffSchwartzAlgo = LongstaffSchwartzAlgo();
-    longstaffSchwartzAlgo.BackwardFit();
+    longstaffSchwartzAlgo.BackwardFit(coeffs);
+    longstaffSchwartzAlgo.ForwardEvaluate(coeffs);
 
     return 0;
 }

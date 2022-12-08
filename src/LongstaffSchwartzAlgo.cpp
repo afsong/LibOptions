@@ -42,21 +42,78 @@ void UpdateCashflow(vector<double> &cashflow,
 }
 
 
+void PredictContinuationValues(const std::vector<std::vector<double>> &stockPricePaths,
+                               const std::vector<std::vector<double>> &coeffs,
+                               int timestampNum,
+                               int forwardPathsNum,
+                               std::vector<std::vector<double>> &predictedValues)
+{
+    vector<double> currentStockPrices;
+    vector<double> currentPredictedContinuationValues;
+    for (int i = 0; i < timestampNum - 1; i++)
+    {
+        currentStockPrices.clear();
+        currentPredictedContinuationValues.clear();
+        for (int j = 0; j < forwardPathsNum; j++)
+        {
+            currentStockPrices.push_back(stockPricePaths[j][i]);
+        }
+        PolyPredict(currentStockPrices, coeffs.at(timestampNum-i-2), currentPredictedContinuationValues, 3);
+        predictedValues.push_back(currentPredictedContinuationValues);
+    }
+}
+
+double SumOptimalExercisedPayoffs (const std::vector<std::vector<double>> &stockPricePaths,
+                                   const std::vector<std::vector<double>> &predictedValues,
+                                   int timestampNum,
+                                   int forwardPathsNum,
+                                   double K,
+                                   double r,
+                                   double dt)
+{
+    double sumValue = 0.0;
+    int sumNum = 0;
+    for (int i = 0; i < forwardPathsNum; i++)
+    {
+        for (int j = 0; j < timestampNum - 1; j++)
+        {
+            double currentPayoff = PutOptionPayoff(stockPricePaths[i][j], K);
+            if (currentPayoff > 0 && currentPayoff > predictedValues[j][i] ) {
+//                std::cout << "Path number: " << i << " ";
+//                std::cout << "Exercise timestamp: " << j << "\n";
+//                std::cout << "Stock price: " << stockPricePaths[i][j] << " ";
+//                std::cout << "Current payoff: " << currentPayoff << " ";
+//                std::cout << "Predicted continuation value: " << predictedValues[j][i] << "\n";
+//                std::cout << std:: endl;
+                sumValue += currentPayoff * exp(-r * dt * j);
+                sumNum += 1;
+                break;
+            }
+        }
+    }
+    return sumValue;
+//    std::cout << "Option value: " << sumValue / forwardPathsNum << "\n";
+//    std::cout << "Num of exercised: " << sumNum << "\n";
+//    std::cout << std:: endl;
+}
+
+
 LongstaffSchwartzAlgo::LongstaffSchwartzAlgo()
 { // Constructor with parameters
     backwardPathsNum = 100000;
-    forwardPathsNum = 100;
-    timestampNum = 100;
+    forwardPathsNum = 100000;
+    timestampNum = 50;
     S0 = 1.0;
     K = 1.0;
     r = 0.04;
     T = 1.0;
     sigma = 0.2;
-    dt = 0.01;
+    dt = T / timestampNum;
 }
 
-int LongstaffSchwartzAlgo::BackwardFit()
+void LongstaffSchwartzAlgo::BackwardFit(std::vector<std::vector<double>> &coeffs)
 {
+    std::cout << "Backward fitting starts " << std::endl;
     // Generate stock price paths
     vector<vector<double>> stockPricePaths = GenerateStockPaths(backwardPathsNum,
                                                                 timestampNum,
@@ -100,12 +157,14 @@ int LongstaffSchwartzAlgo::BackwardFit()
         vector<double> coeff;
         PolyFit(inMoneyStockPrices, inMoneyDiscountedCashflows, coeff, 3);
 
+        coeffs.push_back(coeff);
+
         // 4. Predict cashflow
         std::vector<double> predictedCashflow;
         PolyPredict(inMoneyStockPrices, coeff, predictedCashflow, 3);
 
         // Calculate meanSquaredError
-        std::cout<< "Loss: "<< "\n";
+        std::cout<< "Loss: "<< " ";
         std::cout << MeanSquaredError(inMoneyDiscountedCashflows, predictedCashflow) << std::endl;
 
         // 5. Update cashflow
@@ -115,10 +174,28 @@ int LongstaffSchwartzAlgo::BackwardFit()
         std::cout << "Cashflow mean: " << reduce(cashflow.begin(), cashflow.end()) / cashflow.size() << "\n";
 
     }
-    return 0;
 }
 
-int LongstaffSchwartzAlgo::ForwardEvaluation()
+double LongstaffSchwartzAlgo::ForwardEvaluate(const std::vector<std::vector<double>> &coeffs)
 {
+    std::cout << "Forward evaluation starts " << std::endl;
+    // 1. Generate stock price paths for forward evaluation
+    vector<vector<double>> stockPricePaths = GenerateStockPaths(forwardPathsNum,
+                                                                timestampNum,
+                                                                S0, T, r, sigma);
 
+    assert(timestampNum == coeffs.size() + 1);
+
+    // 2. Predict all expected continuation values
+    std::vector<std::vector<double>> predictedValues;
+    PredictContinuationValues(stockPricePaths, coeffs, timestampNum, forwardPathsNum, predictedValues);
+
+    // 3. Calculate option values based on optimal stop rules
+    double optionValues = SumOptimalExercisedPayoffs(stockPricePaths,
+                                                     predictedValues,
+                                                     timestampNum, forwardPathsNum,
+                                                     K, r, dt) / forwardPathsNum;
+
+    std::cout << "Forward evaluated option values: " << optionValues  << std::endl;
+    return optionValues;
 }
