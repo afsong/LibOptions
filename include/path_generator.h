@@ -1,6 +1,8 @@
 #ifndef __PATH_GENERATOR_H__
 #define __PATH_GENERATOR_H__
 
+#include <vector>
+
 namespace LibOptions {
 
 class PathGenerator {

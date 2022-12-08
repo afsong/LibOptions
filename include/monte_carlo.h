@@ -8,9 +8,9 @@ namespace LibOptions {
 
 struct MonteCarloConfig {
     double d_origPrice;
-    int d_numTimestamps;
+    double d_numTimestamps;
     double d_strikePrice;
-    int d_numPaths;
+    double d_numPaths;
     double d_riskFreeRate;
     double d_volatility;
 };
