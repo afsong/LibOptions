@@ -25,7 +25,7 @@ std::vector<std::vector<double>> MonteCarloPath::generateStockPaths()
         }
     }
 
-    double dt = d_config.d_strikePrice / d_config.d_numTimestamps;
+    double dt = d_config.d_time / d_config.d_numTimestamps;
     double price = d_config.d_origPrice;
 
     for (int i = 0; i < d_config.d_numPaths; i++) {

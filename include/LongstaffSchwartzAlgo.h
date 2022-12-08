@@ -4,24 +4,41 @@
 #include <vector>
 #include <LeastSquaresFitter.h>
 
+
+namespace LibOptions {
+
 using namespace std;
 
+struct LongstaffConfig {
+    int backwardPathsNum;
+    int forwardPathsNum;
+    int timestampNum;
+    double S0;
+    double K;
+    double T;
+    double r;
+    double sigma;
+    int leastSquaresOrder;
+};
+
 class LongstaffSchwartzAlgo {
-    private:
-        int backwardPathsNum;
-        int forwardPathsNum;
-        int timestampNum;
-        double S0;
-        double K;
-        double T;
-        double r;
-        double sigma;
-        double dt;
-        int leastSquaresOrder;
-    public:
-        LongstaffSchwartzAlgo();
-        void BackwardFit(vector<vector<double>> &coeffs);
-        double ForwardEvaluate(const vector<vector<double>> &coeffs);
+private:
+    int backwardPathsNum;
+    int forwardPathsNum;
+    int timestampNum;
+    double S0;
+    double K;
+    double T;
+    double r;
+    double sigma;
+    double dt;
+    int leastSquaresOrder;
+public:
+    LongstaffSchwartzAlgo(const LibOptions::LongstaffConfig &longstaffConfig);
+
+    void BackwardFit(vector<vector<double>> &coeffs);
+
+    double ForwardEvaluate(const vector<vector<double>> &coeffs);
 
 };
 
@@ -40,13 +57,13 @@ void PredictContinuationValues(const vector<vector<double>> &stockPricePaths,
                                int order,
                                vector<vector<double>> &predictedValues);
 
-double SumOptimalExercisedPayoffs (const vector<vector<double>> &stockPricePaths,
-                                   const vector<vector<double>> &predictedValues,
-                                   int timestampNum,
-                                   int forwardPathsNum,
-                                   double K,
-                                   double r,
-                                   double dt);
-
+double SumOptimalExercisedPayoffs(const vector<vector<double>> &stockPricePaths,
+                                  const vector<vector<double>> &predictedValues,
+                                  int timestampNum,
+                                  int forwardPathsNum,
+                                  double K,
+                                  double r,
+                                  double dt);
+}
 
 #endif // LIBOPTIONS_LONGSTAFFSCHWARTZALGO_H

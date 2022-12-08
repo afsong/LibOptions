@@ -9,7 +9,7 @@ namespace LibOptions {
 struct MonteCarloConfig {
     double d_origPrice;
     double d_numTimestamps;
-    double d_strikePrice;
+    double d_time;
     double d_numPaths;
     double d_riskFreeRate;
     double d_volatility;
@@ -27,6 +27,6 @@ private:
     std::vector<std::vector<double>> d_paths;
 };
 
-} // namespace LibOptions
+}
 
 #endif // LIBOPTIONS_MONTECARLO_H

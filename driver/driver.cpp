@@ -1,16 +1,25 @@
-#include <MonteCarlo.h>
 #include <iostream>
 #include <LongstaffSchwartzAlgo.h>
-#include <LeastSquaresFitter.h>
 #include <monte_carlo.h>
 #include <binary_tree.h>
 
 //main function
 using namespace std;
+
 int main(int argc, char *argv[])
 {
     vector<vector<double>> coeffs;
-    LongstaffSchwartzAlgo longstaffSchwartzAlgo = LongstaffSchwartzAlgo();
+    LibOptions::LongstaffConfig longstaffConfig;
+    longstaffConfig.backwardPathsNum = 10000;
+    longstaffConfig.forwardPathsNum = 10000;
+    longstaffConfig.timestampNum = 20;
+    longstaffConfig.S0 = 1.0;
+    longstaffConfig.K = 1.0;
+    longstaffConfig.T = 1.0;
+    longstaffConfig.r = 0.04;
+    longstaffConfig.sigma = 0.2;
+    longstaffConfig.leastSquaresOrder = 10;
+    LibOptions::LongstaffSchwartzAlgo longstaffSchwartzAlgo = LibOptions::LongstaffSchwartzAlgo(longstaffConfig);
     longstaffSchwartzAlgo.BackwardFit(coeffs);
     longstaffSchwartzAlgo.ForwardEvaluate(coeffs);
 
@@ -28,7 +37,18 @@ int main(int argc, char *argv[])
     std::cout << "europecall: "<<path.europecall()<< std::endl;
     std::cout << "europeput: "<<path.europeput()<<std::endl;;
     std::cout << "americall: "<<path.americall()<<std::endl;;
-    std::cout << "americall: "<<path.ameriput()<<std::endl;;
+    std::cout << "ameriput: "<<path.ameriput()<<std::endl;;
+
+    LibOptions::MonteCarloConfig monteConfig;
+    monteConfig.d_origPrice = 1;
+    monteConfig.d_numTimestamps = 100;
+    monteConfig.d_time = 1;
+    monteConfig.d_numPaths = 10000;
+    monteConfig.d_riskFreeRate = 0.04;
+    monteConfig.d_volatility = 0.2;
+
+    LibOptions::MonteCarloPath monteCarloPath(monteConfig);
+    monteCarloPath.generateStockPaths();
 
     return 0;
 
