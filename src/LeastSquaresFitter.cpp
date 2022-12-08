@@ -3,11 +3,12 @@
 #include <vector>
 #include <Eigen/QR>
 
+LeastSquaresFitter::LeastSquaresFitter(int order)
+    : order(order)
+{}
+
 // from: https://towardsdatascience.com/least-square-polynomial-fitting-using-c-eigen-package-c0673728bd01
-void PolyFit(const std::vector<double> &xs,
-             const std::vector<double> &ys,
-             std::vector<double> &coeff,
-             int order)
+void LeastSquaresFitter::PolyFit(const vector<double> &xs, const vector<double> &ys, vector<double> &coeff)
 {
     // Create Matrix Placeholder of size n x k, n= number of datapoints, k = order of polynomial, for exame k = 3 for cubic polynomial
     Eigen::MatrixXd T(xs.size(), order + 1);
@@ -26,8 +27,6 @@ void PolyFit(const std::vector<double> &xs,
             T(i, j) = pow(xs.at(i), j);
         }
     }
-    // Print out the matrix
-//    std::cout<<T<<std::endl;
 
     // Solve for linear least square fit
     result  = T.householderQr().solve(V);
@@ -38,10 +37,9 @@ void PolyFit(const std::vector<double> &xs,
     }
 }
 
-void PolyPredict(const std::vector<double> &xs,
-                 const std::vector<double> &coeff,
-                 std::vector<double> &predictedYs,
-                 int order)
+void LeastSquaresFitter::PolyPredict(const vector<double> &xs,
+                                     vector<double> &predictedYs,
+                                     const vector<double> &coeff)
 {
     for(int i = 0; i < xs.size(); ++i)
     {

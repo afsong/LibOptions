@@ -5,6 +5,7 @@
 #include <numeric>
 #include <MonteCarlo.h>
 #include <LeastSquaresFitter.h>
+#include <AmericanOption.h>
 
 using namespace std;
 
@@ -46,6 +47,7 @@ void PredictContinuationValues(const std::vector<std::vector<double>> &stockPric
                                const std::vector<std::vector<double>> &coeffs,
                                int timestampNum,
                                int forwardPathsNum,
+                               int order,
                                std::vector<std::vector<double>> &predictedValues)
 {
     vector<double> currentStockPrices;
@@ -58,7 +60,8 @@ void PredictContinuationValues(const std::vector<std::vector<double>> &stockPric
         {
             currentStockPrices.push_back(stockPricePaths[j][i]);
         }
-        PolyPredict(currentStockPrices, coeffs.at(timestampNum-i-2), currentPredictedContinuationValues, 3);
+        LeastSquaresFitter fitter = LeastSquaresFitter(order);
+        fitter.PolyPredict(currentStockPrices, currentPredictedContinuationValues, coeffs.at(timestampNum-i-2));
         predictedValues.push_back(currentPredictedContinuationValues);
     }
 }
@@ -108,6 +111,7 @@ LongstaffSchwartzAlgo::LongstaffSchwartzAlgo()
     r = 0.04;
     T = 1.0;
     sigma = 0.2;
+    leastSquaresOrder = 3;
     dt = T / timestampNum;
 }
 
@@ -153,15 +157,17 @@ void LongstaffSchwartzAlgo::BackwardFit(std::vector<std::vector<double>> &coeffs
             }
         }
 
+        LeastSquaresFitter fitter = LeastSquaresFitter(leastSquaresOrder);
+
         // 3. Apply least squares method
         vector<double> coeff;
-        PolyFit(inMoneyStockPrices, inMoneyDiscountedCashflows, coeff, 3);
+        fitter.PolyFit(inMoneyStockPrices, inMoneyDiscountedCashflows, coeff);
 
         coeffs.push_back(coeff);
 
         // 4. Predict cashflow
         std::vector<double> predictedCashflow;
-        PolyPredict(inMoneyStockPrices, coeff, predictedCashflow, 3);
+        fitter.PolyPredict(inMoneyStockPrices, predictedCashflow, coeff);
 
         // Calculate meanSquaredError
         std::cout<< "Loss: "<< " ";
@@ -188,7 +194,7 @@ double LongstaffSchwartzAlgo::ForwardEvaluate(const std::vector<std::vector<doub
 
     // 2. Predict all expected continuation values
     std::vector<std::vector<double>> predictedValues;
-    PredictContinuationValues(stockPricePaths, coeffs, timestampNum, forwardPathsNum, predictedValues);
+    PredictContinuationValues(stockPricePaths, coeffs, timestampNum, forwardPathsNum, leastSquaresOrder, predictedValues);
 
     // 3. Calculate option values based on optimal stop rules
     double optionValues = SumOptimalExercisedPayoffs(stockPricePaths,
