@@ -21,10 +21,17 @@ public:
 
     std::vector<std::vector<double>> generateStockPaths();
     void printPath();
+    double europecall();
+    double europeput();
+    double americall();
+     double ameriput();
 
 private:
     BinaryTreeConfig d_config;
     std::vector<std::vector<double>> d_paths;
+    double d_p ;
+    double d_d ;
+    int d_statusFlg = 0;
 };
 
 }

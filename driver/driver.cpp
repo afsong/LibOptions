@@ -36,6 +36,9 @@ int main(int argc, char* argv[])
     LibOptions::BinaryTreePath path(treeConfig);
     path.generateStockPaths();
     path.printPath();
-
+    std::cout << "europecall: "<<path.europecall()<< std::endl;
+    std::cout << "europeput: "<<path.europeput()<<std::endl;;
+    std::cout << "americall: "<<path.americall()<<std::endl;;
+    std::cout << "americall: "<<path.ameriput()<<std::endl;;
     return 0;
 }
