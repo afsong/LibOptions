@@ -15,7 +15,7 @@ std::vector<std::vector<double>> MonteCarloPath::generateStockPaths()
     // generate dW for stock price paths
     std::vector<std::vector<double>> dW;
 
-    std::default_random_engine generator;
+    std::default_random_engine generator(d_config.seed);
     std::normal_distribution<double> distribution(0.0, 1.0);
 
     for (int i = 0; i < d_config.d_numPaths; i++) {

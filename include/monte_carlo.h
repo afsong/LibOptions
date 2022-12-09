@@ -13,6 +13,7 @@ struct MonteCarloConfig {
     double d_numPaths;
     double d_riskFreeRate;
     double d_volatility;
+    int seed;
 };
 
 class MonteCarloPath : public PathGenerator {

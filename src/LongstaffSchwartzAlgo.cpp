@@ -91,7 +91,9 @@ double LibOptions::SumOptimalExercisedPayoffs (const std::vector<std::vector<dou
 LibOptions::LongstaffSchwartzAlgo::LongstaffSchwartzAlgo(const LibOptions::LongstaffConfig &longstaffConfig)
 { // Constructor with parameters
     backwardPathsNum = longstaffConfig.backwardPathsNum;
+    backwardSeed = longstaffConfig.backwardSeed;
     forwardPathsNum = longstaffConfig.forwardPathsNum;
+    forwardSeed = longstaffConfig.forwardSeed;
     timestampNum = longstaffConfig.timestampNum;
     S0 = longstaffConfig.S0;
     K = longstaffConfig.K;
@@ -101,8 +103,10 @@ LibOptions::LongstaffSchwartzAlgo::LongstaffSchwartzAlgo(const LibOptions::Longs
     leastSquaresOrder = longstaffConfig.leastSquaresOrder;
     dt = longstaffConfig.T / longstaffConfig.timestampNum;
     std::cout << "Longstaff-Schwartz American Option Config"<< "\n";
-    std::cout << "Backward paths number: "<< backwardPathsNum << "\n";
-    std::cout << "Forward paths number: "<< forwardPathsNum << "\n";
+    std::cout << "Backward paths number: "<< backwardPathsNum << ", ";
+    std::cout << "Random generator seed: "<< backwardSeed << "\n";
+    std::cout << "Forward paths number: "<< forwardPathsNum << ", ";
+    std::cout << "Random generator seed: "<< forwardSeed << "\n";
     std::cout << "Timestamps number: "<< timestampNum << "\n";
     std::cout << "S0: "<< S0 << ", ";
     std::cout << "K: "<< K << ", ";
@@ -121,6 +125,7 @@ void LibOptions::LongstaffSchwartzAlgo::BackwardFit(std::vector<std::vector<doub
     // Generate stock price paths
     LibOptions::MonteCarloConfig monteConfig;
     monteConfig.d_numPaths = backwardPathsNum;
+    monteConfig.seed = backwardSeed;
     monteConfig.d_numTimestamps = timestampNum;
     monteConfig.d_origPrice = S0;
     monteConfig.d_time = T;
@@ -196,6 +201,7 @@ double LibOptions::LongstaffSchwartzAlgo::ForwardEvaluate(const std::vector<std:
     // 1. Generate stock price paths for forward evaluation
     LibOptions::MonteCarloConfig monteConfig;
     monteConfig.d_numPaths = forwardPathsNum;
+    monteConfig.seed = forwardSeed;
     monteConfig.d_numTimestamps = timestampNum;
     monteConfig.d_origPrice = S0;
     monteConfig.d_time = T;

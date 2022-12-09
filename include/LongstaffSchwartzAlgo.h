@@ -11,7 +11,9 @@ using namespace std;
 
 struct LongstaffConfig {
     int backwardPathsNum;
+    int backwardSeed;
     int forwardPathsNum;
+    int forwardSeed;
     int timestampNum;
     double S0;
     double K;
@@ -24,7 +26,9 @@ struct LongstaffConfig {
 class LongstaffSchwartzAlgo {
 private:
     int backwardPathsNum;
+    int backwardSeed;
     int forwardPathsNum;
+    int forwardSeed;
     int timestampNum;
     double S0;
     double K;
