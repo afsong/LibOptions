@@ -2,7 +2,7 @@
 #define LIBOPTIONS_LONGSTAFFSCHWARTZALGO_H
 #include <iostream>
 #include <vector>
-#include <LeastSquaresFitter.h>
+#include <least_squares_fitter.h>
 
 
 namespace LibOptions {

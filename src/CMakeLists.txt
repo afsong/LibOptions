@@ -5,7 +5,7 @@ add_library(options
         pbPlots/supportLib.cpp
         monte_carlo.cpp
         binary_tree.cpp
-        LeastSquaresFitter.cpp
+        least_squares_fitter.cpp
         LongstaffSchwartzAlgo.cpp
         AmericanOption.cpp
         PathPlotter.cpp)

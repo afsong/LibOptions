@@ -2,7 +2,7 @@
 #include <vector>
 #include <cmath>
 #include <numeric>
-#include <LeastSquaresFitter.h>
+#include <least_squares_fitter.h>
 #include <AmericanOption.h>
 #include <monte_carlo.h>
 #include <LongstaffSchwartzAlgo.h>
