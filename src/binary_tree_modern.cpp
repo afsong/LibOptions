@@ -81,7 +81,7 @@ std::vector<std::vector<double>> BinaryTreeModern::generateStockPaths()
                 prob[j] = d_prob_paths[i - 2][j - 1] * prob_storage[2 * j - 1]
                           + d_prob_paths[i - 2][j] * prob_storage[2 * j];
             }
-            prob[i - 1] = d_prob_paths[i - 2][i - 2] * prob_storage[2 * i - 2];
+            prob[i - 1] = d_prob_paths[i - 2][i - 2] * prob_storage[2 * i - 3];
             d_prob_paths.push_back(prob);
         }
         else {
@@ -118,7 +118,7 @@ std::vector<std::vector<double>> BinaryTreeModern::generateStockPaths()
                 prob[j] = d_prob_paths[i - 2][j - 1] * prob_storage[2 * j - 1]
                           + d_prob_paths[i - 2][j] * prob_storage[2 * j];
             }
-            prob[i - 1] = d_prob_paths[i - 2][i - 2] * prob_storage[2 * i - 2];
+            prob[i - 1] = d_prob_paths[i - 2][i - 2] * prob_storage[2 * i - 3];
             d_prob_paths.push_back(prob);
         }
     }
