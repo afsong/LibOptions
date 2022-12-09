@@ -9,8 +9,8 @@ add_library(options
         least_squares_fitter.cpp
         longstaff_schwartz_algo.cpp
         
-        AmericanOption.cpp
-        PathPlotter.cpp)
+        american_option.cpp
+        path_plotter.cpp)
 
 target_link_libraries(options
         Eigen3::Eigen
