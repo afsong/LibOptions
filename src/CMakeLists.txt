@@ -1,6 +1,6 @@
 add_library(options
-        pbPlots.cpp ../include/pbPlots.hpp
-        supportLib.cpp ../include/supportLib.hpp
+        pbPlots/pbPlots.cpp
+        pbPlots/supportLib.cpp
         monte_carlo.cpp
         binary_tree.cpp
         LeastSquaresFitter.cpp

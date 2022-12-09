@@ -1,6 +1,6 @@
 #include <PathPlotter.h>
-#include <pbPlots.hpp>
-#include <supportLib.hpp>
+#include "pbPlots/pbPlots.hpp"
+#include "pbPlots/supportLib.hpp"
 
 #include <iostream>
 #include <vector>
