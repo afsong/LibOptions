@@ -1,5 +1,8 @@
 #ifndef LIBOPTIONS_BSM_H
 #define LIBOPTIONS_BSM_H
+
+#include <vector>
+
 #include <path_generator.h>
 namespace LibOptions {
 
