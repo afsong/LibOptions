@@ -11,9 +11,9 @@ int main(int argc, char *argv[])
     vector<vector<double>> coeffs;
     LibOptions::LongstaffConfig longstaffConfig;
     longstaffConfig.backwardPathsNum = 10000;
-    longstaffConfig.backwardSeed = 2;
+    longstaffConfig.backwardSeed = rand() % 1000 + 1;
     longstaffConfig.forwardPathsNum = 10000;
-    longstaffConfig.forwardSeed = 3;
+    longstaffConfig.forwardSeed = rand() % 1000 + 1;
     longstaffConfig.timestampNum = 100;
     longstaffConfig.S0 = 1.0;
     longstaffConfig.K = 1.0;
