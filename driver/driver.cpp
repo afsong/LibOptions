@@ -1,10 +1,45 @@
 #include <iostream>
-
+#include <longstaff_schwartz_algo.h>
 #include <monte_carlo.h>
 #include <europevanilla_model.h>
+#include <binary_tree.h>
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
+    std::vector<std::vector<double>> coeffs;
+    LibOptions::LongstaffConfig longstaffConfig;
+    longstaffConfig.backwardPathsNum = 10000;
+    longstaffConfig.backwardSeed = rand() % 1000 + 1;
+    longstaffConfig.forwardPathsNum = 10000;
+    longstaffConfig.forwardSeed = rand() % 1000 + 1;
+    longstaffConfig.timestampNum = 100;
+    longstaffConfig.S0 = 1.0;
+    longstaffConfig.K = 1.0;
+    longstaffConfig.T = 1.0;
+    longstaffConfig.r = 0.04;
+    longstaffConfig.sigma = 0.2;
+    longstaffConfig.leastSquaresOrder = 10;
+    longstaffConfig.plotGraphs = true;
+    LibOptions::LongstaffSchwartzAlgo longstaffSchwartzAlgo = LibOptions::LongstaffSchwartzAlgo(longstaffConfig);
+    longstaffSchwartzAlgo.BackwardFit(coeffs);
+    longstaffSchwartzAlgo.ForwardEvaluate(coeffs);
+
+    LibOptions::BinaryTreeConfig treeConfig;
+    treeConfig.d_origPrice = 29;
+    treeConfig.d_numTimestamps = 1;
+    treeConfig.d_strikePrice = 30;
+    treeConfig.d_numSteps = 2;
+    treeConfig.d_riskFreeRate = 0.03;
+    treeConfig.d_volatility = 0.25;
+
+    LibOptions::BinaryTreePath path(treeConfig);
+    path.generateStockPaths();
+    path.printPath();
+    std::cout << "europecall: "<<path.europecall()<< std::endl;
+    std::cout << "europeput: "<<path.europeput()<<std::endl;;
+    std::cout << "americall: "<<path.americall()<<std::endl;;
+    std::cout << "ameriput: "<<path.ameriput()<<std::endl;;
+
     std::vector<std::vector<double>> vect;
 
     for (int i = 0; i < 10; i++) {
@@ -15,10 +50,11 @@ int main(int argc, char* argv[])
     LibOptions::MonteCarloConfig monteConfig;
     monteConfig.d_origPrice = 1;
     monteConfig.d_numTimestamps = 10;
-    monteConfig.d_strikePrice = 1;
+    monteConfig.d_time = 1;
     monteConfig.d_numPaths = 100;
     monteConfig.d_riskFreeRate = 0.04;
     monteConfig.d_volatility = 0.2;
+    monteConfig.seed = 10;
 
     LibOptions::MonteCarloPath path(monteConfig);
     path.generateStockPaths();
@@ -43,4 +79,5 @@ int main(int argc, char* argv[])
    
 
     return 0;
+
 }
