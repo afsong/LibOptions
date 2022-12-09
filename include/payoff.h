@@ -1,6 +1,6 @@
 #ifndef LIBOPTIONS_PAYOFF_H
 #define LIBOPTIONS_PAYOFF_H
-
+#include <vector>
 namespace LibOptions {
 
 class Payoff {
