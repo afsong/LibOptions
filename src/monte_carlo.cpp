@@ -4,6 +4,8 @@
 #include <random>
 #include <vector>
 
+#include <double_vector.h>
+
 namespace LibOptions {
 
 MonteCarloPath::MonteCarloPath(const MonteCarloConfig& config)
@@ -13,15 +15,14 @@ MonteCarloPath::MonteCarloPath(const MonteCarloConfig& config)
 std::vector<std::vector<double>> MonteCarloPath::generateStockPaths()
 {
     // generate dW for stock price paths
-    std::vector<std::vector<double>> dW;
+    DoubleVector<double> dW(d_config.d_numPaths, d_config.d_numTimestamps);
 
     std::default_random_engine generator(d_config.seed);
     std::normal_distribution<double> distribution(0.0, 1.0);
 
     for (int i = 0; i < d_config.d_numPaths; i++) {
-        dW.push_back({});
         for (int j = 0; j < d_config.d_numTimestamps; j++) {
-            dW[i].push_back(distribution(generator));
+            dW.set(i, j, distribution(generator));
         }
     }
 
@@ -32,7 +33,7 @@ std::vector<std::vector<double>> MonteCarloPath::generateStockPaths()
         d_paths.push_back({});
         for (int j = 0; j < d_config.d_numTimestamps; j++) {
             price += d_config.d_riskFreeRate * price * dt
-                     + d_config.d_volatility * price * sqrt(dt) * dW[i][j];
+                     + d_config.d_volatility * price * sqrt(dt) * dW.get(i, j);
             d_paths[i].push_back(price);
         }
         price = d_config.d_origPrice;

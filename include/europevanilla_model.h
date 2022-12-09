@@ -3,6 +3,7 @@
 #include <constant_volatility.h>
 #include <model.h>
 #include <string>
+#include <memory>
 
 namespace LibOptions {
 
