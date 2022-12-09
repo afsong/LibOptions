@@ -11,8 +11,8 @@
 
 using namespace std;
 
-void LibOptions::DiscountCashflow(vector<double>& cashflow, const double r,
-                                  const double dt, const int i)
+void LibOptions::DiscountCashflow(vector<double>& cashflow,  double r,
+                                   double dt,  int i)
 {
     for (int j = 0; j < cashflow.size(); j++) {
         cashflow[j] *= exp(-r * dt * i);
@@ -211,9 +211,9 @@ void LibOptions::LongstaffSchwartzAlgo::BackwardFit(
                   << "\n";
         vector<double> xVec(timestampNum - 1);
         std::iota(xVec.begin(), xVec.end(), 1);
-        Utils::plotPath(xVec, cashflowMeans, "cashflows_along_backward_steps");
+        Utils::plotPath(xVec, cashflowMeans, "cashflows_along_backward_steps.png");
         Utils::plotPath(xVec, losses,
-                        "least_squares_losses_along_backward_steps");
+                        "least_squares_losses_along_backward_steps.png");
         std::cout << "Plotting ends"
                   << "\n"
                   << std::endl;

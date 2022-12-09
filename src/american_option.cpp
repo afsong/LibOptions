@@ -1,6 +1,6 @@
-#include <AmericanOption.h>
 #include <algorithm>
-#include <math.h>
+#include <american_option.h>
+#include <cmath>
 
 namespace LibOptions {
 double PutOptionPayoff(double S, double K)
@@ -32,6 +32,7 @@ double SmoothDigit(double S, double K)
 double SmoothDirac(double S, double K)
 {
     double a = 0.00001;
-    return exp(-(K - S) / a) / (a * pow(1.0 + exp(-(K - S) / a), 2));
+    return std::exp(-(K - S) / a)
+           / (a * std::pow(1.0 + std::exp(-(K - S) / a), 2));
 }
 } // namespace LibOptions
