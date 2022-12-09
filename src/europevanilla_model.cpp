@@ -7,6 +7,7 @@
 #include <iomanip>
 #include <iostream>
 #include <random>
+#include <constant_volatility.h>
 #include <vector>
 
 namespace LibOptions {
@@ -45,19 +46,22 @@ double EuropeVanillaModel::calc_value()
         config.d_dividend = d_config.d_dividend;
         config.d_steps = d_config.samplesize;
 
-        BinaryTreeModern btpath(config);
-        auto result = btpath.generateStockPaths();
-        paths = result[0];
-        auto probs = result[1];
-
-        EuroVanillaPayoffConfig payoffconfig;
-        payoffconfig.d_strikePrice = d_config.d_strikePrice;
-        payoffconfig.iscall = d_config.iscall;
-        EuroVanillaPayoff evpayoff(payoffconfig);
-        payoffs = evpayoff.calc_payoff(paths);
-        for (int i = 0; i < payoffs.size(); i++) {
-            payoffs[i] = payoffs[i] * probs[i];
-        }
+        // BinaryTreeModern btpath(config);
+        // auto result = btpath.generateStockPaths();
+        // auto path_before_cleanse = result[0];
+        // for (int i = 0; i < path_before_cleanse.size(); i++) {
+        //     paths.push_back({path_before_cleanse[i]});
+        // }
+        // auto probs = result[1];
+        
+        // EuroVanillaPayoffConfig payoffconfig;
+        // payoffconfig.d_strikePrice = d_config.d_strikePrice;
+        // payoffconfig.iscall = d_config.iscall;
+        // EuroVanillaPayoff evpayoff(payoffconfig);
+        // payoffs = evpayoff.calc_payoff(paths);
+        // for (int i = 0; i < payoffs.size(); i++) {
+        //     payoffs[i] = payoffs[i] * probs[i];
+        // }
     }
     else {
         throw new std::exception;

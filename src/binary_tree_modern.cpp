@@ -32,6 +32,9 @@ double binary_tree_prob_down(double F, double Su, double Sd)
 
 std::vector<std::vector<double>> BinaryTreeModern::generateStockPaths()
 {
+    double S;
+    double F;
+
     d_prob_paths.push_back({1.0});
     d_paths.push_back({d_config.d_origPrice});
     double dt = d_config.d_time / d_config.d_steps;
@@ -40,7 +43,7 @@ std::vector<std::vector<double>> BinaryTreeModern::generateStockPaths()
             std::vector<double> storage(i);
             std::vector<double> prob_storage(2 * i - 2);
             int mid = (int)i / 2;
-            double vol = d_config.d_volatility.local_vol(
+            double vol = d_config.d_volatility->local_vol(
                 d_paths[i - 2][mid - 1], dt * (i - 2));
             storage[mid] = d_paths[i - 2][mid - 1] * exp(-vol * sqrt(dt));
             storage[mid - 1] = d_paths[i - 2][mid - 1] * exp(-vol * sqrt(dt));
@@ -54,7 +57,7 @@ std::vector<std::vector<double>> BinaryTreeModern::generateStockPaths()
                 F = S
                     * exp((d_config.d_riskFreeRate - d_config.d_dividend) * dt);
                 storage[j] = binary_tree_node_up(
-                    F, S, d_config.d_volatility.local_vol(S, dt * (i - 2)), dt,
+                    F, S, d_config.d_volatility->local_vol(S, dt * (i - 2)), dt,
                     storage[j + 1]);
                 prob_storage[2 * j]
                     = binary_tree_prob_up(F, storage[j], storage[j + 1]);
@@ -65,7 +68,7 @@ std::vector<std::vector<double>> BinaryTreeModern::generateStockPaths()
                 F = S
                     * exp((d_config.d_riskFreeRate - d_config.d_dividend) * dt);
                 storage[j] = binary_tree_node_down(
-                    F, S, d_config.d_volatility.local_vol(S, dt * (i - 2)), dt,
+                    F, S, d_config.d_volatility->local_vol(S, dt * (i - 2)), dt,
                     storage[j - 1]);
                 prob_storage[2 * j - 2]
                     = binary_tree_prob_up(F, storage[j - 1], storage[j]);
@@ -91,7 +94,7 @@ std::vector<std::vector<double>> BinaryTreeModern::generateStockPaths()
                 F = S
                     * exp((d_config.d_riskFreeRate - d_config.d_dividend) * dt);
                 storage[j] = binary_tree_node_up(
-                    F, S, d_config.d_volatility.local_vol(S, dt * (i - 2)), dt,
+                    F, S, d_config.d_volatility->local_vol(S, dt * (i - 2)), dt,
                     storage[j + 1]);
                 prob_storage[2 * j]
                     = binary_tree_prob_up(F, storage[j], storage[j + 1]);
@@ -102,7 +105,7 @@ std::vector<std::vector<double>> BinaryTreeModern::generateStockPaths()
                 F = S
                     * exp((d_config.d_riskFreeRate - d_config.d_dividend) * dt);
                 storage[j] = binary_tree_node_down(
-                    F, S, d_config.d_volatility.local_vol(S, dt * (i - 2)), dt,
+                    F, S, d_config.d_volatility->local_vol(S, dt * (i - 2)), dt,
                     storage[j - 1]);
                 prob_storage[2 * j - 2]
                     = binary_tree_prob_up(F, storage[j - 1], storage[j]);
@@ -124,5 +127,7 @@ std::vector<std::vector<double>> BinaryTreeModern::generateStockPaths()
     result.push_back(d_prob_paths[d_prob_paths.size() - 1]);
     return result;
 }
+
+void BinaryTreeModern::printPath() {}
 
 } // namespace LibOptions

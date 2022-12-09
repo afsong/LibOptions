@@ -82,7 +82,7 @@ int main(int argc, char* argv[])
     evConfig.samplesize = 10000;
     evConfig.iscall = true;
     evConfig.pricingmodeltype = "bsm";
-    
+
     LibOptions::EuropeVanillaModel evModel(evConfig);
     double price = evModel.calc_value();
     std::cout << "The price of EuroVanilla: " << price << std::endl;
@@ -98,7 +98,7 @@ int main(int argc, char* argv[])
     evConfig_bt.iscall = true;
     evConfig_bt.pricingmodeltype = "binomial tree";
     LibOptions::EuropeVanillaModel evModel_bt(evConfig_bt);
-    double price = evModel_bt.calc_value();
+    price = evModel_bt.calc_value();
     std::cout << "The price of EuroVanilla: " << price << std::endl;
     return 0;
 }
