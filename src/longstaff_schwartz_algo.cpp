@@ -3,10 +3,10 @@
 #include <cmath>
 #include <numeric>
 #include <least_squares_fitter.h>
-#include <AmericanOption.h>
+#include <american_option.h>
 #include <monte_carlo.h>
 #include <longstaff_schwartz_algo.h>
-#include <PathPlotter.h>
+#include <path_plotter.h>
 #include <cassert>
 
 

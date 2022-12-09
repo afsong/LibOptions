@@ -1,4 +1,4 @@
-#include <AmericanOption.h>
+#include <american_option.h>
 #include <algorithm>
 #include <math.h>
 

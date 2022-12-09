@@ -1,4 +1,4 @@
-#include <PathPlotter.h>
+#include <path_plotter.h>
 #include "pbPlots/pbPlots.hpp"
 #include "pbPlots/supportLib.hpp"
 

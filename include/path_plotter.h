@@ -1,5 +1,5 @@
-#ifndef LIBOPTIONS_PATHPLOTTER_H
-#define LIBOPTIONS_PATHPLOTTER_H
+#ifndef LIBOPTIONS_PATH_PLOTTER_H
+#define LIBOPTIONS_PATH_PLOTTER_H
 
 #include <iostream>
 #include <vector>
@@ -9,4 +9,4 @@ class PathPlotter {};
 
 int PlotAPath(vector<double> x, vector<double> y, string filename);
 
-#endif // LIBOPTIONS_PATHPLOTTER_H
+#endif // LIBOPTIONS_PATH_PLOTTER_H
