@@ -2,7 +2,11 @@
 #include <pbPlots.hpp>
 #include <supportLib.hpp>
 
-int PlotAPath(vector<double> x, vector<double> y){
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int PlotAPath(vector<double> x, vector<double> y, string filename){
         bool success;
         StringReference *errorMessage = new StringReference();
         RGBABitmapImageReference *imageReference = CreateRGBABitmapImageReference();
@@ -11,7 +15,7 @@ int PlotAPath(vector<double> x, vector<double> y){
 
         if(success){
             vector<double> *pngdata = ConvertToPNG(imageReference->image);
-            WriteToFile(pngdata, "example.png");
+            WriteToFile(pngdata, filename);
             DeleteImage(imageReference->image);
         }else{
             cerr << "Error: ";

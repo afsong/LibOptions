@@ -6,10 +6,11 @@
 #include <AmericanOption.h>
 #include <monte_carlo.h>
 #include <LongstaffSchwartzAlgo.h>
+#include <PathPlotter.h>
 
 using namespace std;
 
-void LibOptions::DiscountCashflow(std::vector<double> &cashflow, const double r, const double dt, const int i)
+void LibOptions::DiscountCashflow(vector<double> &cashflow, const double r, const double dt, const int i)
 {
     for (int j = 0; j < cashflow.size(); j++)
     {
@@ -18,10 +19,10 @@ void LibOptions::DiscountCashflow(std::vector<double> &cashflow, const double r,
 }
 
 void LibOptions::UpdateCashflow(vector<double> &cashflow,
-                    const vector<double> &inMoneyStockPrices,
-                    const vector<int> &inMoneyPaths,
-                    const vector<double> &predictedCashflow,
-                    int K)
+                                const vector<double> &inMoneyStockPrices,
+                                const vector<int> &inMoneyPaths,
+                                const vector<double> &predictedCashflow,
+                                int K)
 {
     vector<double> exerciseValues;
     for (double stockPrice : inMoneyStockPrices)
@@ -39,12 +40,12 @@ void LibOptions::UpdateCashflow(vector<double> &cashflow,
 }
 
 
-void LibOptions::PredictContinuationValues(const std::vector<std::vector<double>> &stockPricePaths,
-                               const std::vector<std::vector<double>> &coeffs,
-                               int timestampNum,
-                               int forwardPathsNum,
-                               int order,
-                               std::vector<std::vector<double>> &predictedValues)
+void LibOptions::PredictContinuationValues(const vector<vector<double>> &stockPricePaths,
+                                           const vector<vector<double>> &coeffs,
+                                           int timestampNum,
+                                           int forwardPathsNum,
+                                           int order,
+                                           vector<vector<double>> &predictedValues)
 {
     vector<double> currentStockPrices;
     vector<double> currentPredictedContinuationValues;
@@ -62,13 +63,13 @@ void LibOptions::PredictContinuationValues(const std::vector<std::vector<double>
     }
 }
 
-double LibOptions::SumOptimalExercisedPayoffs (const std::vector<std::vector<double>> &stockPricePaths,
-                                   const std::vector<std::vector<double>> &predictedValues,
-                                   int timestampNum,
-                                   int forwardPathsNum,
-                                   double K,
-                                   double r,
-                                   double dt)
+double LibOptions::SumOptimalExercisedPayoffs (const vector<vector<double>> &stockPricePaths,
+                                               const vector<vector<double>> &predictedValues,
+                                               int timestampNum,
+                                               int forwardPathsNum,
+                                               double K,
+                                               double r,
+                                               double dt)
 {
     double sumValue = 0.0;
     int sumNum = 0;
@@ -100,8 +101,9 @@ LibOptions::LongstaffSchwartzAlgo::LongstaffSchwartzAlgo(const LibOptions::Longs
     T = longstaffConfig.T;
     r = longstaffConfig.r;
     sigma = longstaffConfig.sigma;
-    leastSquaresOrder = longstaffConfig.leastSquaresOrder;
     dt = longstaffConfig.T / longstaffConfig.timestampNum;
+    leastSquaresOrder = longstaffConfig.leastSquaresOrder;
+    plotGraphs = longstaffConfig.plotGraphs;
     std::cout << "Longstaff-Schwartz American Option Config"<< "\n";
     std::cout << "Backward paths number: "<< backwardPathsNum << ", ";
     std::cout << "Random generator seed: "<< backwardSeed << "\n";
@@ -115,10 +117,17 @@ LibOptions::LongstaffSchwartzAlgo::LongstaffSchwartzAlgo(const LibOptions::Longs
     std::cout << "sigma: "<< sigma << ", ";
     std::cout << "dt: "<< dt << "\n";
     std::cout << "Least squares method order: "<< leastSquaresOrder << "\n";
+    if (plotGraphs)
+    {
+        std::cout << "Plot Graphs: "<< "true" << "\n";
+    } else
+    {
+        std::cout << "Plot Graphs: "<< "false" << "\n";
+    }
     std::cout << std::endl;
 }
 
-void LibOptions::LongstaffSchwartzAlgo::BackwardFit(std::vector<std::vector<double>> &coeffs)
+void LibOptions::LongstaffSchwartzAlgo::BackwardFit(vector<vector<double>> &coeffs)
 {
     std::cout << "Backward fitting starts " << std::endl;
 
@@ -133,12 +142,16 @@ void LibOptions::LongstaffSchwartzAlgo::BackwardFit(std::vector<std::vector<doub
     monteConfig.d_volatility = sigma;
 
     LibOptions::MonteCarloPath monteCarloPath(monteConfig);
-
     vector<vector<double>> stockPricePaths = monteCarloPath.generateStockPaths();
+
 
     int callNum = timestampNum;
 
     vector<double> cashflow;
+
+    // Used for plotting cashflow means and least squares losses along the backward steps
+    vector<double> cashflowMeans;
+    vector<double> losses;
 
     // Get the expiration cashflow
     for (int i = 0; i < stockPricePaths.size(); i++)
@@ -183,19 +196,32 @@ void LibOptions::LongstaffSchwartzAlgo::BackwardFit(std::vector<std::vector<doub
         fitter.PolyPredict(inMoneyStockPrices, predictedCashflow, coeff);
 
         // Calculate meanSquaredError
-//        std::cout<< "Loss: "<< " ";
-//        std::cout << MeanSquaredError(inMoneyDiscountedCashflows, predictedCashflow) << std::endl;
+        double loss = MeanSquaredError(inMoneyDiscountedCashflows, predictedCashflow);
+        losses.push_back(loss);
+//        std::cout<< "Loss: " << loss << std::endl;
 
         // 5. Update cashflow
         UpdateCashflow(cashflow, inMoneyStockPrices, inMoneyPaths, predictedCashflow, K);
 
         // 6. Calculate cashflow mean
-        std::cout << "cashflow mean is " << reduce(cashflow.begin(), cashflow.end()) / cashflow.size() << "\n";
+        double currCashflowMean = reduce(cashflow.begin(), cashflow.end()) / cashflow.size();
+        cashflowMeans.push_back(currCashflowMean);
+        std::cout << "cashflow mean is " << currCashflowMean << "\n";
     }
     std::cout << "Backward fitting ends " << "\n" <<std::endl;
+
+    if (plotGraphs)
+    {
+        std::cout << "Plotting starts" << "\n";
+        vector<double> xVec(timestampNum-1);
+        std::iota(xVec.begin(), xVec.end(), 1);
+        PlotAPath(xVec, cashflowMeans, "cashflows_along_backward_steps");
+        PlotAPath(xVec, losses, "least_squares_losses_along_backward_steps");
+        std::cout << "Plotting ends" << "\n" <<std::endl;
+    }
 }
 
-double LibOptions::LongstaffSchwartzAlgo::ForwardEvaluate(const std::vector<std::vector<double>> &coeffs)
+double LibOptions::LongstaffSchwartzAlgo::ForwardEvaluate(const vector<vector<double>> &coeffs)
 {
     std::cout << "Forward evaluation starts " << std::endl;
     // 1. Generate stock price paths for forward evaluation

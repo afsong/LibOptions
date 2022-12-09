@@ -5,7 +5,8 @@ add_library(options
         binary_tree.cpp
         LeastSquaresFitter.cpp
         LongstaffSchwartzAlgo.cpp
-        AmericanOption.cpp)
+        AmericanOption.cpp
+        PathPlotter.cpp)
 
 # PROJECT_SOURCE_DIR - macro for project root dir
 target_include_directories(options PUBLIC ${PROJECT_SOURCE_DIR}/include)

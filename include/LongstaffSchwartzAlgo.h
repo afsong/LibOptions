@@ -21,6 +21,7 @@ struct LongstaffConfig {
     double r;
     double sigma;
     int leastSquaresOrder;
+    bool plotGraphs;
 };
 
 class LongstaffSchwartzAlgo {
@@ -37,6 +38,7 @@ private:
     double sigma;
     double dt;
     int leastSquaresOrder;
+    bool plotGraphs;
 public:
     LongstaffSchwartzAlgo(const LibOptions::LongstaffConfig &longstaffConfig);
 
