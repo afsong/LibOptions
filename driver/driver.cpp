@@ -1,4 +1,6 @@
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 #include <longstaff_schwartz_algo.h>
 #include <monte_carlo.h>
 #include <europevanilla_model.h>
@@ -6,12 +8,14 @@
 
 int main(int argc, char *argv[])
 {
+    srand(time(NULL));
+
     std::vector<std::vector<double>> coeffs;
     LibOptions::LongstaffConfig longstaffConfig;
-    longstaffConfig.backwardPathsNum = 10000;
-    longstaffConfig.backwardSeed = rand() % 1000 + 1;
-    longstaffConfig.forwardPathsNum = 10000;
-    longstaffConfig.forwardSeed = rand() % 1000 + 1;
+    longstaffConfig.backwardPathsNum = 50000;
+    longstaffConfig.backwardSeed = std::rand();
+    longstaffConfig.forwardPathsNum = 50000;
+    longstaffConfig.forwardSeed = std::rand();
     longstaffConfig.timestampNum = 100;
     longstaffConfig.S0 = 1.0;
     longstaffConfig.K = 1.0;
