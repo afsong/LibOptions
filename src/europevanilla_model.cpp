@@ -17,11 +17,19 @@ double EuropeVanillaModel::calc_value() {
     std::vector<std::vector<double>> paths;
     std::vector<double> payoffs;
     if (d_config.pricingmodeltype == "bsm") { 
-        BSMConfig config(d_config.d_origPrice,d_config.d_volatility,d_config.d_riskFreeRate,d_config.d_strikePrice,d_config.d_time,d_config.d_dividend,d_config.samplesize);
+        BSMConfig config;
+        config.d_origPrice=d_config.d_origPrice;
+        config.d_volatility = d_config.d_volatility;
+        config.d_riskFreeRate = d_config.d_riskFreeRate;
+        config.d_strikePrice=d_config.d_strikePrice;
+        config.d_time=d_config.d_time;
+        config.d_dividend=d_config.d_dividend;
+        config.samplesize =d_config.samplesize;
         BSMPath bsmpath(config);
         paths = bsmpath.generateStockPaths();
-        EuroVanillaPayoffConfig payoffconfig(d_config.d_strikePrice,
-                                             d_config.iscall);
+        EuroVanillaPayoffConfig payoffconfig;
+        payoffconfig.d_strikePrice=d_config.d_strikePrice;
+        payoffconfig.iscall = d_config.iscall;
         EuroVanillaPayoff evpayoff(payoffconfig);
         payoffs = evpayoff.calc_payoff(paths);
         

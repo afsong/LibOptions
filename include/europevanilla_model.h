@@ -2,6 +2,7 @@
 #define LIBOPTIONS_EUROPE_VANILLA_MODEL_H
 #include <model.h>
 #include <string>
+
 namespace LibOptions {
 
 struct EuropeVanillaModelConfig {
