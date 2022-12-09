@@ -5,8 +5,10 @@
 #include <least_squares_fitter.h>
 #include <AmericanOption.h>
 #include <monte_carlo.h>
-#include <LongstaffSchwartzAlgo.h>
+#include <longstaff_schwartz_algo.h>
 #include <PathPlotter.h>
+#include <cassert>
+
 
 using namespace std;
 

@@ -1,5 +1,5 @@
 #include <iostream>
-#include <LongstaffSchwartzAlgo.h>
+#include <longstaff_schwartz_algo.h>
 #include <monte_carlo.h>
 #include <binary_tree.h>
 
