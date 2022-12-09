@@ -1,5 +1,5 @@
-#ifndef LIBOPTIONS_AMERICANOPTION_H
-#define LIBOPTIONS_AMERICANOPTION_H
+#ifndef LIBOPTIONS_AMERICAN_OPTION_H
+#define LIBOPTIONS_AMERICAN_OPTION_H
 
 namespace LibOptions {
 class AmericanOption {};
@@ -11,4 +11,4 @@ double SmoothDigit(double S, double K);
 double SmoothDirac(double S, double K);
 } // namespace LibOptions
 
-#endif // LIBOPTIONS_AMERICANOPTION_H
+#endif // LIBOPTIONS_AMERICAN_OPTION_H

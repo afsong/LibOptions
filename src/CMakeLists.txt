@@ -3,7 +3,6 @@ find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 add_library(options
         pbPlots/pbPlots.cpp
         pbPlots/supportLib.cpp
-
         monte_carlo.cpp
         binary_tree.cpp
         least_squares_fitter.cpp
