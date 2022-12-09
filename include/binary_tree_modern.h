@@ -1,15 +1,16 @@
 #ifndef LIBOPTIONS_BINARY_TREE_MODERN_H
 #define LIBOPTIONS_BINARY_TREE_MODERN_H
 
+#include <memory>
 #include <path_generator.h>
 #include <vector>
 #include <volatility.h>
-namespace LibOptions {
 
+namespace LibOptions {
 
 struct BinaryTreeModernConfig {
     double d_origPrice;
-    Volatility d_volatility;
+    std::shared_ptr<Volatility> d_volatility;
     double d_riskFreeRate;
     double d_strikePrice;
     double d_time;

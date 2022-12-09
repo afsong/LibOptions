@@ -4,9 +4,9 @@
 #include <volatility.h>
 namespace LibOptions {
 
-class ConstantVolatility : public class Volatility {
+class ConstantVolatility : public Volatility {
 public:
-    ConstantVolatility(const double sigma);
+    ConstantVolatility(double sigma);
     double local_vol(double S, double t);
 private:
     double sigma;

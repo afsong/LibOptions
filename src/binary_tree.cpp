@@ -90,7 +90,7 @@ double BinaryTreePath::americall()
     if (!d_statusFlg) { generateStockPaths(); }
     std::vector<double> values;
     std::vector<double> prices = d_paths[0];
-    
+
     values.push_back(std::max(prices[0] - d_config.d_strikePrice, 0.0));
     for (int i = 0; i < d_paths.size(); i++) {
         for (int j = 1; j < d_paths[i].size(); j++) {
@@ -98,7 +98,7 @@ double BinaryTreePath::americall()
                 std::max(d_paths[i][j] - d_config.d_strikePrice, 0.0));
         }
     }
-    
+
     for (int i = d_paths.size() - 1; i >= 0; i--) {
         for (int j = 0; j < i; j++) {
             prices[j] = prices[j + 1] * d_d;
@@ -116,15 +116,15 @@ double BinaryTreePath::ameriput()
 {
     if (!d_statusFlg) { generateStockPaths(); }
     std::vector<double> values;
-     std::vector<double> prices = d_paths[0];
-    values.push_back(std::max(d_config.d_strikePrice-prices[0] , 0.0));
+    std::vector<double> prices = d_paths[0];
+    values.push_back(std::max(d_config.d_strikePrice - prices[0], 0.0));
     for (int i = 0; i < d_paths.size(); i++) {
         for (int j = 1; j < d_paths[i].size(); j++) {
             values.push_back(
-                std::max( d_config.d_strikePrice-d_paths[i][j] , 0.0));
+                std::max(d_config.d_strikePrice - d_paths[i][j], 0.0));
         }
     }
-    
+
     for (int i = d_paths.size() - 1; i >= 0; i--) {
         for (int j = 0; j < i; j++) {
             prices[j] = prices[j + 1] * d_d;
@@ -132,7 +132,7 @@ double BinaryTreePath::ameriput()
                 (d_p * values[j + 1] + (1 - d_p) * values[j])
                     * exp(-d_config.d_riskFreeRate * d_config.d_numTimestamps
                           / d_config.d_numSteps),
-                 d_config.d_strikePrice-prices[j]);
+                d_config.d_strikePrice - prices[j]);
         }
     }
     return values[0];

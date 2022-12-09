@@ -1,9 +1,8 @@
 #ifndef LIBOPTIONS_LONGSTAFFSCHWARTZALGO_H
 #define LIBOPTIONS_LONGSTAFFSCHWARTZALGO_H
 #include <iostream>
-#include <vector>
 #include <least_squares_fitter.h>
-
+#include <vector>
 
 namespace LibOptions {
 
@@ -40,36 +39,30 @@ private:
     int leastSquaresOrder;
     bool plotGraphs;
 public:
-    LongstaffSchwartzAlgo(const LibOptions::LongstaffConfig &longstaffConfig);
+    LongstaffSchwartzAlgo(const LibOptions::LongstaffConfig& longstaffConfig);
 
-    void BackwardFit(vector<vector<double>> &coeffs);
+    void BackwardFit(vector<vector<double>>& coeffs);
 
-    double ForwardEvaluate(const vector<vector<double>> &coeffs);
-
+    double ForwardEvaluate(const vector<vector<double>>& coeffs);
 };
 
-void DiscountCashflow(vector<double> &cashflow, const double r, const double dt, const int i);
+void DiscountCashflow(vector<double>& cashflow, const double r, const double dt,
+                      const int i);
 
-void UpdateCashflow(vector<double> &cashflow,
-                    const vector<double> &inMoneyStockPrices,
-                    const vector<int> &inMoneyPaths,
-                    const vector<double> &predictedCashflow,
-                    int K);
+void UpdateCashflow(vector<double>& cashflow,
+                    const vector<double>& inMoneyStockPrices,
+                    const vector<int>& inMoneyPaths,
+                    const vector<double>& predictedCashflow, int K);
 
-void PredictContinuationValues(const vector<vector<double>> &stockPricePaths,
-                               const vector<vector<double>> &coeffs,
-                               int timestampNum,
-                               int forwardPathsNum,
-                               int order,
-                               vector<vector<double>> &predictedValues);
+void PredictContinuationValues(const vector<vector<double>>& stockPricePaths,
+                               const vector<vector<double>>& coeffs,
+                               int timestampNum, int forwardPathsNum, int order,
+                               vector<vector<double>>& predictedValues);
 
-double SumOptimalExercisedPayoffs(const vector<vector<double>> &stockPricePaths,
-                                  const vector<vector<double>> &predictedValues,
-                                  int timestampNum,
-                                  int forwardPathsNum,
-                                  double K,
-                                  double r,
-                                  double dt);
-}
+double SumOptimalExercisedPayoffs(const vector<vector<double>>& stockPricePaths,
+                                  const vector<vector<double>>& predictedValues,
+                                  int timestampNum, int forwardPathsNum,
+                                  double K, double r, double dt);
+} // namespace LibOptions
 
 #endif // LIBOPTIONS_LONGSTAFFSCHWARTZALGO_H

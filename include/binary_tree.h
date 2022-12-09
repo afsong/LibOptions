@@ -12,7 +12,6 @@ struct BinaryTreeConfig {
     double d_numSteps;
     double d_riskFreeRate;
     double d_volatility;
-
 };
 
 class BinaryTreePath : public PathGenerator {
@@ -25,15 +24,14 @@ public:
     double europeput();
     double americall();
     double ameriput();
-
 private:
     BinaryTreeConfig d_config;
     std::vector<std::vector<double>> d_paths;
-    double d_p ;
-    double d_d ;
+    double d_p;
+    double d_d;
     int d_statusFlg = 0;
 };
 
-}
+} // namespace LibOptions
 
 #endif

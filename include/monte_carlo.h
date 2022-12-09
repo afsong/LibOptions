@@ -1,8 +1,8 @@
 #ifndef LIBOPTIONS_MONTECARLO_H
 #define LIBOPTIONS_MONTECARLO_H
 
-#include <vector>
 #include <path_generator.h>
+#include <vector>
 
 namespace LibOptions {
 
@@ -22,12 +22,11 @@ public:
 
     std::vector<std::vector<double>> generateStockPaths();
     void printPath();
-
 private:
     MonteCarloConfig d_config;
     std::vector<std::vector<double>> d_paths;
 };
 
-}
+} // namespace LibOptions
 
 #endif // LIBOPTIONS_MONTECARLO_H

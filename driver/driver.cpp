@@ -1,12 +1,12 @@
+#include <binary_tree.h>
+#include <constant_volatility.h>
+#include <europevanilla_model.h>
 #include <iostream>
 #include <longstaff_schwartz_algo.h>
 #include <monte_carlo.h>
-#include <europevanilla_model.h>
-#include <binary_tree.h>
 #include <volatility.h>
-#include <constant_volatility.h>
 
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
     std::vector<std::vector<double>> coeffs;
     LibOptions::LongstaffConfig longstaffConfig;
@@ -22,7 +22,8 @@ int main(int argc, char *argv[])
     longstaffConfig.sigma = 0.2;
     longstaffConfig.leastSquaresOrder = 10;
     longstaffConfig.plotGraphs = true;
-    LibOptions::LongstaffSchwartzAlgo longstaffSchwartzAlgo = LibOptions::LongstaffSchwartzAlgo(longstaffConfig);
+    LibOptions::LongstaffSchwartzAlgo longstaffSchwartzAlgo
+        = LibOptions::LongstaffSchwartzAlgo(longstaffConfig);
     longstaffSchwartzAlgo.BackwardFit(coeffs);
     longstaffSchwartzAlgo.ForwardEvaluate(coeffs);
 
@@ -37,10 +38,13 @@ int main(int argc, char *argv[])
     LibOptions::BinaryTreePath path(treeConfig);
     path.generateStockPaths();
     path.printPath();
-    std::cout << "europecall: "<<path.europecall()<< std::endl;
-    std::cout << "europeput: "<<path.europeput()<<std::endl;;
-    std::cout << "americall: "<<path.americall()<<std::endl;;
-    std::cout << "ameriput: "<<path.ameriput()<<std::endl;;
+    std::cout << "europecall: " << path.europecall() << std::endl;
+    std::cout << "europeput: " << path.europeput() << std::endl;
+    ;
+    std::cout << "americall: " << path.americall() << std::endl;
+    ;
+    std::cout << "ameriput: " << path.ameriput() << std::endl;
+    ;
 
     std::vector<std::vector<double>> vect;
 
@@ -65,18 +69,20 @@ int main(int argc, char *argv[])
     */
 
     // BSM Vanilla below
-    LibOptions::ConstantVolatility consVol(0.1);
+    std::shared_ptr<LibOptions::ConstantVolatility> consVol(
+        std::make_shared<LibOptions::ConstantVolatility>(0.1));
 
     LibOptions::EuropeVanillaModelConfig evConfig;
-    evConfig.d_origPrice=100;
-    evConfig.d_volatility=consVol;
-    evConfig.d_riskFreeRate=0.02;
-    evConfig.d_strikePrice=100;
-    evConfig.d_time=3;
-    evConfig.d_dividend=0;
-    evConfig.samplesize=10000;
-    evConfig.iscall=true;
-    evConfig.pricingmodeltype= "bsm";
+    evConfig.d_origPrice = 100;
+    evConfig.d_volatility = consVol;
+    evConfig.d_riskFreeRate = 0.02;
+    evConfig.d_strikePrice = 100;
+    evConfig.d_time = 3;
+    evConfig.d_dividend = 0;
+    evConfig.samplesize = 10000;
+    evConfig.iscall = true;
+    evConfig.pricingmodeltype = "bsm";
+    
     LibOptions::EuropeVanillaModel evModel(evConfig);
     double price = evModel.calc_value();
     std::cout << "The price of EuroVanilla: " << price << std::endl;
@@ -95,5 +101,4 @@ int main(int argc, char *argv[])
     double price = evModel_bt.calc_value();
     std::cout << "The price of EuroVanilla: " << price << std::endl;
     return 0;
-
 }
