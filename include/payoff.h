@@ -9,7 +9,5 @@ public:
     calc_payoff(std::vector<std::vector<double>> path) = 0;
 };
 
-
-
-}
+} // namespace LibOptions
 #endif

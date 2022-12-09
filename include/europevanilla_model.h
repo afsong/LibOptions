@@ -1,5 +1,6 @@
 #ifndef LIBOPTIONS_EUROPE_VANILLA_MODEL_H
 #define LIBOPTIONS_EUROPE_VANILLA_MODEL_H
+#include <constant_volatility.h>
 #include <model.h>
 #include <string>
 
@@ -7,7 +8,7 @@ namespace LibOptions {
 
 struct EuropeVanillaModelConfig {
     double d_origPrice;
-    double d_volatility;
+    std::shared_ptr<ConstantVolatility> d_volatility;
     double d_riskFreeRate;
     double d_strikePrice;
     double d_time;

@@ -1,9 +1,8 @@
 #ifndef LIBOPTIONS_BSM_H
 #define LIBOPTIONS_BSM_H
 
-#include <vector>
-
 #include <path_generator.h>
+#include <vector>
 namespace LibOptions {
 
 struct BSMConfig {
@@ -25,11 +24,6 @@ private:
     std::vector<std::vector<double>> d_paths;
 };
 
-}
-
-
-
-
-
+} // namespace LibOptions
 
 #endif

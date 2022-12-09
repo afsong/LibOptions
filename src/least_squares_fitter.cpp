@@ -1,6 +1,6 @@
 #include <Eigen/QR>
-#include <least_squares_fitter.h>
 #include <cmath>
+#include <least_squares_fitter.h>
 #include <vector>
 
 namespace LibOptions {

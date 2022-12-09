@@ -15,6 +15,8 @@ add_library(options
         europevanilla_payoff.cpp 
         europedigital_payoff.cpp 
         europevanilla_model.cpp
+        constant_volatility.cpp
+        binary_tree_modern.cpp
 )
 
 target_link_libraries(options
