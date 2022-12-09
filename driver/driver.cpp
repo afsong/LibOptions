@@ -1,21 +1,19 @@
 #include <iostream>
-#include <cstdlib>
-#include <ctime>
 #include <longstaff_schwartz_algo.h>
 #include <monte_carlo.h>
 #include <europevanilla_model.h>
 #include <binary_tree.h>
+#include <volatility.h>
+#include <constant_volatility.h>
 
 int main(int argc, char *argv[])
 {
-    srand(time(NULL));
-
     std::vector<std::vector<double>> coeffs;
     LibOptions::LongstaffConfig longstaffConfig;
-    longstaffConfig.backwardPathsNum = 50000;
-    longstaffConfig.backwardSeed = std::rand();
-    longstaffConfig.forwardPathsNum = 50000;
-    longstaffConfig.forwardSeed = std::rand();
+    longstaffConfig.backwardPathsNum = 10000;
+    longstaffConfig.backwardSeed = rand() % 1000 + 1;
+    longstaffConfig.forwardPathsNum = 10000;
+    longstaffConfig.forwardSeed = rand() % 1000 + 1;
     longstaffConfig.timestampNum = 100;
     longstaffConfig.S0 = 1.0;
     longstaffConfig.K = 1.0;
@@ -67,9 +65,11 @@ int main(int argc, char *argv[])
     */
 
     // BSM Vanilla below
+    LibOptions::ConstantVolatility consVol(0.1);
+
     LibOptions::EuropeVanillaModelConfig evConfig;
     evConfig.d_origPrice=100;
-    evConfig.d_volatility=0.1;
+    evConfig.d_volatility=consVol;
     evConfig.d_riskFreeRate=0.02;
     evConfig.d_strikePrice=100;
     evConfig.d_time=3;
@@ -80,8 +80,20 @@ int main(int argc, char *argv[])
     LibOptions::EuropeVanillaModel evModel(evConfig);
     double price = evModel.calc_value();
     std::cout << "The price of EuroVanilla: " << price << std::endl;
-   
-
+    // Binomial Tree
+    LibOptions::EuropeVanillaModelConfig evConfig_bt;
+    evConfig_bt.d_origPrice = 100;
+    evConfig_bt.d_volatility = consVol;
+    evConfig_bt.d_riskFreeRate = 0.02;
+    evConfig_bt.d_strikePrice = 100;
+    evConfig_bt.d_time = 3;
+    evConfig_bt.d_dividend = 0;
+    evConfig_bt.samplesize = 10000;
+    evConfig_bt.iscall = true;
+    evConfig_bt.pricingmodeltype = "binomial tree";
+    LibOptions::EuropeVanillaModel evModel_bt(evConfig_bt);
+    double price = evModel_bt.calc_value();
+    std::cout << "The price of EuroVanilla: " << price << std::endl;
     return 0;
 
 }
