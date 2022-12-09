@@ -1,30 +1,31 @@
 #include <iostream>
-
+#include <longstaff_schwartz_algo.h>
 #include <monte_carlo.h>
-#include<binary_tree.h>
-int main(int argc, char* argv[])
+#include <binary_tree.h>
+
+//main function
+using namespace std;
+
+int main(int argc, char *argv[])
 {
-    // std::vector<std::vector<double>> vect;
+    vector<vector<double>> coeffs;
+    LibOptions::LongstaffConfig longstaffConfig;
+    longstaffConfig.backwardPathsNum = 10000;
+    longstaffConfig.backwardSeed = rand() % 1000 + 1;
+    longstaffConfig.forwardPathsNum = 10000;
+    longstaffConfig.forwardSeed = rand() % 1000 + 1;
+    longstaffConfig.timestampNum = 100;
+    longstaffConfig.S0 = 1.0;
+    longstaffConfig.K = 1.0;
+    longstaffConfig.T = 1.0;
+    longstaffConfig.r = 0.04;
+    longstaffConfig.sigma = 0.2;
+    longstaffConfig.leastSquaresOrder = 10;
+    longstaffConfig.plotGraphs = true;
+    LibOptions::LongstaffSchwartzAlgo longstaffSchwartzAlgo = LibOptions::LongstaffSchwartzAlgo(longstaffConfig);
+    longstaffSchwartzAlgo.BackwardFit(coeffs);
+    longstaffSchwartzAlgo.ForwardEvaluate(coeffs);
 
-    // for (int i = 0; i < 10; i++) {
-    //     vect.push_back({});
-    //     for (int j = 0; j < 5; j++) { vect[i].push_back(1); }
-    // }
-    
-    // LibOptions::MonteCarloConfig monteConfig;
-    // monteConfig.d_origPrice = 1;
-    // monteConfig.d_numTimestamps = 10;
-    // monteConfig.d_strikePrice = 1;
-    // monteConfig.d_numPaths = 100;
-    // monteConfig.d_riskFreeRate = 0.04;
-    // monteConfig.d_volatility = 0.2;
-
-    // LibOptions::MonteCarloPath path(monteConfig);
-    // path.generateStockPaths();
-
-    // path.printPath();
-
-   
     LibOptions::BinaryTreeConfig treeConfig;
     treeConfig.d_origPrice = 29;
     treeConfig.d_numTimestamps = 1;
@@ -39,6 +40,20 @@ int main(int argc, char* argv[])
     std::cout << "europecall: "<<path.europecall()<< std::endl;
     std::cout << "europeput: "<<path.europeput()<<std::endl;;
     std::cout << "americall: "<<path.americall()<<std::endl;;
-    std::cout << "americall: "<<path.ameriput()<<std::endl;;
+    std::cout << "ameriput: "<<path.ameriput()<<std::endl;;
+
+    LibOptions::MonteCarloConfig monteConfig;
+    monteConfig.d_origPrice = 1;
+    monteConfig.d_numTimestamps = 10;
+    monteConfig.d_time = 1;
+    monteConfig.d_numPaths = 100;
+    monteConfig.d_riskFreeRate = 0.04;
+    monteConfig.d_volatility = 0.2;
+    monteConfig.seed = 10;
+
+    LibOptions::MonteCarloPath monteCarloPath(monteConfig);
+    monteCarloPath.generateStockPaths();
+
     return 0;
+
 }

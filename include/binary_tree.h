@@ -24,7 +24,7 @@ public:
     double europecall();
     double europeput();
     double americall();
-     double ameriput();
+    double ameriput();
 
 private:
     BinaryTreeConfig d_config;
