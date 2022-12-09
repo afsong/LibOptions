@@ -1,7 +1,6 @@
 #ifndef LIBOPTIONS_EUROPE_DIGITAL_PAYOFF_H
 #define LIBOPTIONS_EUROPE_DIGITAL_PAYOFF_H
 #include <payoff.h>
-
 #include <vector>
 namespace LibOptions {
 

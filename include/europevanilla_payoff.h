@@ -10,7 +10,6 @@ struct EuroVanillaPayoffConfig {
     bool iscall;
 };
 class EuroVanillaPayoff : public Payoff {
-
 public:
     EuroVanillaPayoff(const EuroVanillaPayoffConfig& config);
     std::vector<double> calc_payoff(std::vector<std::vector<double>> path);
@@ -18,8 +17,6 @@ private:
     EuroVanillaPayoffConfig d_config;
     std::vector<double> payoff;
 };
-}
-
-
+} // namespace LibOptions
 
 #endif
