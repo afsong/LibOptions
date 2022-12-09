@@ -1,14 +1,12 @@
 #include <iostream>
 #include <longstaff_schwartz_algo.h>
 #include <monte_carlo.h>
+#include <europevanilla_model.h>
 #include <binary_tree.h>
-
-//main function
-using namespace std;
 
 int main(int argc, char *argv[])
 {
-    vector<vector<double>> coeffs;
+    std::vector<std::vector<double>> coeffs;
     LibOptions::LongstaffConfig longstaffConfig;
     longstaffConfig.backwardPathsNum = 10000;
     longstaffConfig.backwardSeed = rand() % 1000 + 1;
@@ -42,6 +40,13 @@ int main(int argc, char *argv[])
     std::cout << "americall: "<<path.americall()<<std::endl;;
     std::cout << "ameriput: "<<path.ameriput()<<std::endl;;
 
+    std::vector<std::vector<double>> vect;
+
+    for (int i = 0; i < 10; i++) {
+        vect.push_back({});
+        for (int j = 0; j < 5; j++) { vect[i].push_back(1); }
+    }
+    /*
     LibOptions::MonteCarloConfig monteConfig;
     monteConfig.d_origPrice = 1;
     monteConfig.d_numTimestamps = 10;
@@ -51,8 +56,27 @@ int main(int argc, char *argv[])
     monteConfig.d_volatility = 0.2;
     monteConfig.seed = 10;
 
-    LibOptions::MonteCarloPath monteCarloPath(monteConfig);
-    monteCarloPath.generateStockPaths();
+    LibOptions::MonteCarloPath path(monteConfig);
+    path.generateStockPaths();
+
+    path.printPath();
+    */
+
+    // BSM Vanilla below
+    LibOptions::EuropeVanillaModelConfig evConfig;
+    evConfig.d_origPrice=100;
+    evConfig.d_volatility=0.1;
+    evConfig.d_riskFreeRate=0.02;
+    evConfig.d_strikePrice=100;
+    evConfig.d_time=3;
+    evConfig.d_dividend=0;
+    evConfig.samplesize=10000;
+    evConfig.iscall=true;
+    evConfig.pricingmodeltype= "bsm";
+    LibOptions::EuropeVanillaModel evModel(evConfig);
+    double price = evModel.calc_value();
+    std::cout << "The price of EuroVanilla: " << price << std::endl;
+   
 
     return 0;
 

@@ -9,7 +9,13 @@ add_library(options
         longstaff_schwartz_algo.cpp
         
         american_option.cpp
-        path_plotter.cpp)
+        path_plotter.cpp
+        
+        bsm.cpp 
+        europevanilla_payoff.cpp 
+        europedigital_payoff.cpp 
+        europevanilla_model.cpp
+)
 
 target_link_libraries(options
         Eigen3::Eigen
