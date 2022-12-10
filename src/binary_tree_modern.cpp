@@ -46,7 +46,7 @@ std::vector<std::vector<double>> BinaryTreeModern::generateStockPaths()
             double vol = d_config.d_volatility->local_vol(
                 d_paths[i - 2][mid - 1], dt * (i - 2));
             storage[mid] = d_paths[i - 2][mid - 1] * exp(-vol * sqrt(dt));
-            storage[mid - 1] = d_paths[i - 2][mid - 1] * exp(-vol * sqrt(dt));
+            storage[mid - 1] = d_paths[i - 2][mid - 1] * exp(vol * sqrt(dt));
             prob_storage[i - 2] = binary_tree_prob_up(
                 d_paths[i - 2][mid - 1]
                     * exp((d_config.d_riskFreeRate - d_config.d_dividend) * dt),
@@ -81,7 +81,7 @@ std::vector<std::vector<double>> BinaryTreeModern::generateStockPaths()
                 prob[j] = d_prob_paths[i - 2][j - 1] * prob_storage[2 * j - 1]
                           + d_prob_paths[i - 2][j] * prob_storage[2 * j];
             }
-            prob[i - 1] = d_prob_paths[i - 2][i - 2] * prob_storage[2 * i - 2];
+            prob[i - 1] = d_prob_paths[i - 2][i - 2] * prob_storage[2 * i - 3];
             d_prob_paths.push_back(prob);
         }
         else {
@@ -118,7 +118,7 @@ std::vector<std::vector<double>> BinaryTreeModern::generateStockPaths()
                 prob[j] = d_prob_paths[i - 2][j - 1] * prob_storage[2 * j - 1]
                           + d_prob_paths[i - 2][j] * prob_storage[2 * j];
             }
-            prob[i - 1] = d_prob_paths[i - 2][i - 2] * prob_storage[2 * i - 2];
+            prob[i - 1] = d_prob_paths[i - 2][i - 2] * prob_storage[2 * i - 3];
             d_prob_paths.push_back(prob);
         }
     }
