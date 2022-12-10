@@ -9,6 +9,8 @@ Suppose that we want to generate Monte Carlo options price paths. The algorithm 
 The following simple program can illustrate the intended usage.
 
 ```C++
+#include <monte_carlo.h>
+
 int main(int argv, char *argv[])
 {
     LibOptions::MonteCarloConfig monteConfig;
