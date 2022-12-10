@@ -18,6 +18,9 @@ public:
     void set(int i, int j, const T& val);
     const T& get(int i, int j) const;
     T& get(int i, int j);
+
+    size_t width() const;
+    size_t height() const;
 };
 
 template<typename T>
@@ -49,6 +52,19 @@ T& DoubleVector<T>::get(int i, int j)
     return d_data[index];
 }
 
+template<typename T>
+size_t DoubleVector<T>::width() const
+{
+    return d_numCols;
+}
+
+template<typename T>
+size_t DoubleVector<T>::height() const
+{
+    return d_numRows;
+}
+
+using StockPath = DoubleVector<double>;
 } // namespace LibOptions
 
 #endif

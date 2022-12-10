@@ -1,13 +1,15 @@
 #ifndef __PATH_GENERATOR_H__
 #define __PATH_GENERATOR_H__
 
-#include <vector>
+#include <double_vector.h>
 
 namespace LibOptions {
 
 class PathGenerator {
 public:
-    virtual std::vector<std::vector<double>> generateStockPaths() = 0;
+    virtual void generateStockPaths() = 0;
+    virtual const StockPath& getStockPaths() const = 0;
+    virtual StockPath & getStocksPaths() = 0;
     virtual void printPath() = 0;
 };
 
