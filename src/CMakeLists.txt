@@ -17,7 +17,7 @@ add_library(options
         europevanilla_model.cpp
         constant_volatility.cpp
         binary_tree_modern.cpp
-)
+        adv_least_squares_fitter.cpp)
 
 target_link_libraries(options
         Eigen3::Eigen

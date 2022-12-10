@@ -1,7 +1,7 @@
-#include <american_option.h>
 #include <cassert>
 #include <cmath>
 #include <iostream>
+#include <american_option.h>
 #include <least_squares_fitter.h>
 #include <longstaff_schwartz_algo.h>
 #include <monte_carlo.h>
