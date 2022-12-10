@@ -1,7 +1,7 @@
 #include <Eigen/QR>
 #include <cmath>
-#include <least_squares_fitter.h>
 #include <vector>
+#include <least_squares_fitter.h>
 
 namespace LibOptions {
 

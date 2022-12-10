@@ -1,7 +1,7 @@
-#include <american_option.h>
 #include <cassert>
 #include <cmath>
 #include <iostream>
+#include <american_option.h>
 #include <least_squares_fitter.h>
 #include <longstaff_schwartz_algo.h>
 #include <monte_carlo.h>
@@ -26,7 +26,7 @@ void LibOptions::UpdateCashflow(vector<double>& cashflow,
 {
     vector<double> exerciseValues;
     for (double stockPrice: inMoneyStockPrices) {
-        exerciseValues.push_back(PutOptionPayoff(stockPrice, K));
+        exerciseValues.push_back(LibOptions::OptionPayoff(1, stockPrice, K));
     }
 
     for (int i = 0; i < inMoneyPaths.size(); i++) {
@@ -66,7 +66,7 @@ double LibOptions::SumOptimalExercisedPayoffs(
     int sumNum = 0;
     for (int i = 0; i < forwardPathsNum; i++) {
         for (int j = 0; j < timestampNum - 1; j++) {
-            double currentPayoff = PutOptionPayoff(stockPricePaths[i][j], K);
+            double currentPayoff = OptionPayoff(1, stockPricePaths[i][j], K);
             if (currentPayoff > 0 && currentPayoff > predictedValues[j][i]) {
                 sumValue += currentPayoff * exp(-r * dt * j);
                 sumNum += 1;
@@ -150,7 +150,7 @@ void LibOptions::LongstaffSchwartzAlgo::BackwardFit(
 
     // Get the expiration cashflow
     for (int i = 0; i < stockPricePaths.size(); i++) {
-        double payoff = PutOptionPayoff(stockPricePaths[i].back(), K);
+        double payoff = LibOptions::OptionPayoff(1, stockPricePaths[i].back(), K);
         cashflow.push_back(payoff);
     }
 
@@ -167,7 +167,7 @@ void LibOptions::LongstaffSchwartzAlgo::BackwardFit(
         vector<double> inMoneyStockPrices;
         vector<double> inMoneyDiscountedCashflows;
         for (int i = 0; i < stockPricePaths.size(); i++) {
-            if (PutOptionPayoff(stockPricePaths[i][timestamp - 1], K) > 0.0) {
+            if (LibOptions::OptionPayoff(1, stockPricePaths[i][timestamp - 1], K) > 0.0) {
                 inMoneyPaths.push_back(i);
                 inMoneyStockPrices.push_back(stockPricePaths[i][timestamp - 1]);
                 inMoneyDiscountedCashflows.push_back(cashflow[i]);
