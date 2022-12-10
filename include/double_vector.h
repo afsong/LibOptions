@@ -22,7 +22,10 @@ public:
 
 template<typename T>
 DoubleVector<T>::DoubleVector(int r, int c)
-    : d_data(r * c, T()), d_index(0), d_numRows(r), d_numCols(c)
+: d_data(r * c, T())
+, d_index(0)
+, d_numRows(r)
+, d_numCols(c)
 {}
 
 template<typename T>

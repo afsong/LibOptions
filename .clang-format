@@ -42,12 +42,13 @@ BraceWrapping:
 BreakBeforeBinaryOperators: All
 BreakBeforeConceptDeclarations: false
 BreakBeforeTernaryOperators: true
-BreakConstructorInitializers: BeforeColon
+BreakConstructorInitializers: BeforeComma
 BreakInheritanceList: BeforeColon
 BreakStringLiterals: true
 ColumnLimit: 80
 CompactNamespaces: false
 Cpp11BracedListStyle: true
+ConstructorInitializerIndentWidth: 0
 DerivePointerAlignment: false
 EmptyLineBeforeAccessModifier: Never
 FixNamespaceComments: true
@@ -59,6 +60,7 @@ IndentWidth: 4
 IndentWrappedFunctionNames: false
 KeepEmptyLinesAtTheStartOfBlocks: false
 NamespaceIndentation: None
+PackConstructorInitializers: Never
 PointerAlignment: Left
 SortUsingDeclarations: true
 SpaceAfterCStyleCast: false
