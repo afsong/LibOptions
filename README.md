@@ -6,7 +6,7 @@ LibOptions a library that allows user to conveniently calculate options price pa
 ## How to Install
 `LibOptions` requires CMake (>= 3.14) and Eigen3 library. 
 
-Please refer to this link to install [CMake](https://cmake.org/install/) and (this)[http://eigen.tuxfamily.org/index.php?title=Main_Page#Download] to install the Eigen3 library.
+Please refer to this [link](https://cmake.org/install/) to install CMake and [this](http://eigen.tuxfamily.org/index.php?title=Main_Page#Download) to install the Eigen3 library.
 
 ## How to Compile
 To compile everything, simply run
