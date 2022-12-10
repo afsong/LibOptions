@@ -9,10 +9,10 @@
 namespace LibOptions {
 
 MonteCarloPath::MonteCarloPath(const MonteCarloConfig& config)
-    : d_config(config), d_paths()
+    : d_config(config), d_paths(d_config.d_numPaths, d_config.d_numTimestamps)
 {}
 
-std::vector<std::vector<double>> MonteCarloPath::generateStockPaths()
+void MonteCarloPath::generateStockPaths()
 {
     // generate dW for stock price paths
     DoubleVector<double> dW(d_config.d_numPaths, d_config.d_numTimestamps);
@@ -30,25 +30,22 @@ std::vector<std::vector<double>> MonteCarloPath::generateStockPaths()
     double price = d_config.d_origPrice;
 
     for (int i = 0; i < d_config.d_numPaths; i++) {
-        d_paths.push_back({});
         for (int j = 0; j < d_config.d_numTimestamps; j++) {
             price += d_config.d_riskFreeRate * price * dt
                      + d_config.d_volatility * price * sqrt(dt) * dW.get(i, j);
-            d_paths[i].push_back(price);
+            d_paths.set(i, j, price);
         }
         price = d_config.d_origPrice;
     }
-
-    return d_paths;
 }
 
 void MonteCarloPath::printPath()
 {
-    for (int i = 0; i < d_paths.size(); i++) {
-        for (int j = 0; j < d_paths[i].size(); j++) {
+    for (int i = 0; i < d_paths.height(); i++) {
+        for (int j = 0; j < d_paths.width(); j++) {
             std::cout << std::fixed;
             std::cout << std::setw(10);
-            std::cout << d_paths[i][j] << " ";
+            std::cout << d_paths.get(i, j) << " ";
         }
         std::cout << std::endl;
     }
